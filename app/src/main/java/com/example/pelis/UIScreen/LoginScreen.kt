@@ -50,7 +50,7 @@ fun LoginScreen(onLogin: () -> Unit) {
             )
         }
         Button(onClick = {
-            if (username.text == "Admin" && password.text == "123") {
+            if (username.text == "Admin" && password.text == "Password*123") {
                 onLogin()
             } else {
                 showError = true
