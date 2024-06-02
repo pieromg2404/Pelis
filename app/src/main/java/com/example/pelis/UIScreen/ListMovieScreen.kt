@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListMovieScreen(navController: NavController, movieViewModel: MovieViewModel = viewModel()) {
     val movies by movieViewModel.movies.collectAsState()
+    val page by movieViewModel._currentPage.collectAsState()
     val isSearching by movieViewModel._isSearching.collectAsState()
     val isLoadingMore by movieViewModel._isLoadingMore.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -66,7 +67,12 @@ fun ListMovieScreen(navController: NavController, movieViewModel: MovieViewModel
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "List of Movies", style = MaterialTheme.typography.headlineMedium)
+        Row (modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround)
+        {
+            Text(text = "List of Movies", style = MaterialTheme.typography.headlineMedium)
+            Text(text = (page-1).toString(), style = MaterialTheme.typography.headlineMedium)
+        }
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = searchQuery,

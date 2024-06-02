@@ -18,7 +18,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val movieDao: MovieDao
     private val _movies = MutableStateFlow(emptyList<Movie>())
     val movies: StateFlow<List<Movie>> get() = _movies
-    private val _currentPage = MutableStateFlow(1)
+    val _currentPage = MutableStateFlow(1)
     internal val _isSearching = MutableStateFlow(false)
     internal val _isLoadingMore = MutableStateFlow(false)
     private val _searchQuery = MutableStateFlow<String?>(null)
@@ -89,8 +89,10 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     val response = RetrofitInstance.api.searchMovies(query, _currentPage.value)
                     val newMovies = response.results.take(20)
                     _movies.value = _movies.value + newMovies
-                    _currentPage.value = response.page + 1
-                    movieDao.insertAll(newMovies.map { it.toEntity() })
+                    if (newMovies.isNotEmpty()){
+                        _currentPage.value = response.page + 1
+                        movieDao.insertAll(newMovies.map { it.toEntity() })
+                    }
                 } else {
                     fetchMovies()
                 }
